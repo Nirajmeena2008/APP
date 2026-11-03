@@ -73,24 +73,25 @@ class AlarmForegroundService : Service() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val repository = AlarmRepository(this@AlarmForegroundService)
-            alarm = repository.getAlarms().firstOrNull { it.id == alarmId }
+            val currentAlarm = repository.getAlarms().firstOrNull { it.id == alarmId }
 
-            if (alarm != null) {
-                maxSnoozeCount = alarm.snooze.maxCount
-                snoozeDurationMs = alarm.snooze.durationMinutes * 60 * 1000L
+            if (currentAlarm != null) {
+                alarm = currentAlarm
+                maxSnoozeCount = currentAlarm.snooze.maxCount
+                snoozeDurationMs = currentAlarm.snooze.durationMinutes * 60 * 1000L
 
                 showNotification()
 
                 mediaPlayerManager = MediaPlayerManager(this@AlarmForegroundService)
-                mediaPlayerManager?.playAlarm(alarm!!, isPreAlarm) { success ->
+                mediaPlayerManager?.playAlarm(currentAlarm, isPreAlarm) { success ->
                     if (!success) {
                         stopSelf()
                     }
                 }
 
-                if (alarm!!.autoDismiss.enabled) {
+                if (currentAlarm.autoDismiss.enabled) {
                     autoDismissJob = CoroutineScope(Dispatchers.Main).launch {
-                        delay(alarm!!.autoDismiss.timeoutMinutes * 60 * 1000L)
+                        delay(currentAlarm.autoDismiss.timeoutMinutes * 60 * 1000L)
                         if (!challengeCompleted) {
                             dismissAlarm()
                         }
@@ -122,30 +123,30 @@ class AlarmForegroundService : Service() {
     }
 
     private fun showNotification() {
-        val alarm = this.alarm ?: return
+        val currentAlarm = alarm ?: return
 
         val dismissIntent = Intent(this, AlarmForegroundService::class.java).apply {
             action = ACTION_DISMISS
-            putExtra(EXTRA_ALARM_ID, alarm.id)
+            putExtra(EXTRA_ALARM_ID, currentAlarm.id)
         }
         val snoozeIntent = Intent(this, AlarmForegroundService::class.java).apply {
             action = ACTION_SNOOZE
-            putExtra(EXTRA_ALARM_ID, alarm.id)
+            putExtra(EXTRA_ALARM_ID, currentAlarm.id)
         }
 
         val dismissPendingIntent = PendingIntent.getService(
-            this, alarm.id.hashCode(), dismissIntent,
+            this, currentAlarm.id.hashCode(), dismissIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val snoozePendingIntent = PendingIntent.getService(
-            this, alarm.id.hashCode() + 1, snoozeIntent,
+            this, currentAlarm.id.hashCode() + 1, snoozeIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-            .setContentTitle(if (isPreAlarm) "Pre-Alarm: ${alarm.label}" else "Alarm: ${alarm.label}")
-            .setContentText(alarm.time.toString())
+            .setContentTitle(if (isPreAlarm) "Pre-Alarm: ${currentAlarm.label}" else "Alarm: ${currentAlarm.label}")
+            .setContentText(currentAlarm.time.toString())
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -154,7 +155,7 @@ class AlarmForegroundService : Service() {
                 PendingIntent.getActivity(
                     this, 0,
                     Intent(this, MainActivity::class.java).apply {
-                        putExtra("alarm_id", alarm.id)
+                        putExtra("alarm_id", currentAlarm.id)
                         putExtra("is_pre_alarm", isPreAlarm)
                     },
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
