@@ -27,11 +27,12 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: |
-            platforms;android-35
-            build-tools;35.0.0
-            platform-tools
-            cmdline-tools;latest
+          cmdline-tools-version: 'latest'
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager --licenses <<< "y"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       - name: Download Inter font
         run: |
@@ -86,11 +87,12 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: |
-            platforms;android-35
-            build-tools;35.0.0
-            platform-tools
-            cmdline-tools;latest
+          cmdline-tools-version: 'latest'
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager --licenses <<< "y"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       - name: Download Inter font
         run: |
