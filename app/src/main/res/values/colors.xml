@@ -1,0 +1,24 @@
+<resources>
+    <!-- Dark theme colors (fallback for non-Compose views) -->
+    <color name="bg_primary">#000000</color>
+    <color name="bg_secondary">#0A0E27</color>
+    <color name="bg_card">#121212</color>
+    <color name="bg_card_glass">#CC1A1A2E</color>
+    <color name="fg_primary">#FFFFFF</color>
+    <color name="fg_secondary">#E0E0E0</color>
+    <color name="fg_muted">#94A3B8</color>
+    <color name="accent_amber">#D97706</color>
+    <color name="accent_amber_on">#000000</color>
+    <color name="accent_indigo">#6366F1</color>
+    <color name="accent_red">#DC2626</color>
+    <color name="accent_green">#22C55E</color>
+    <color name="border_subtle">#14FFFFFF</color>
+    <color name="border_glass">#26FFFFFF</color>
+    <color name="glow_amber">#4DD97706</color>
+
+    <!-- Light theme colors -->
+    <color name="bg_primary_light">#FAFAFA</color>
+    <color name="bg_card_glass_light">#E6FFFFFF</color>
+    <color name="accent_amber_light">#B45309</color>
+    <color name="glow_amber_light">#33D97706</color>
+</resources>

@@ -1,0 +1,11 @@
+-keep class kotlinx.serialization.** { *; }
+-keep @kotlinx.serialization.Serializable class * { *; }
+-keep class androidx.datastore.** { *; }
+-keep class androidx.media3.** { *; }
+-keep class androidx.glance.** { *; }
+-keep class coil.** { *; }
+-keep class kotlinx.datetime.** { *; }
+-keep class com.yourname.liquidalarm.data.** { *; }
+-keep class com.yourname.liquidalarm.alarm.** { *; }
+-keep class androidx.compose.** { *; }
+-keep class androidx.compose.material3.** { *; }

@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.yourname.liquidalarm.app-mergeDebugResources-86:/values-v25/values-v25.xml",
+            "map": [
+                {
+                    "source": "/home/animer/.gradle/caches/9.6.0/transforms/4990cd2dab49588a1789b196ebbe69d1/transformed/appcompat-1.6.1/res/values-v25/values-v25.xml",
+                    "from": {
+                        "startLines": "2,3,4,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,126,209,308",
+                        "endLines": "2,3,5,7",
+                        "endColumns": "70,82,12,12",
+                        "endOffsets": "121,204,303,414"
+                    }
+                }
+            ]
+        }
+    ]
+}
