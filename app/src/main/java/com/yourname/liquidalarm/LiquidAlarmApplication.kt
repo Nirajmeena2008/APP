@@ -11,7 +11,7 @@ class LiquidAlarmApplication : Application() {
         super.onCreate()
         PreferencesManager(this)
         AlarmScheduler.rescheduleAll(this)
-        PermissionUtils.requestExactAlarmPermission(this)
+        
     }
 
     companion object {

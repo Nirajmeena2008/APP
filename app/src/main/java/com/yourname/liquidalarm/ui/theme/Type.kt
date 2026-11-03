@@ -1,4 +1,5 @@
 package com.yourname.liquidalarm.ui.theme
+import com.yourname.liquidalarm.R
 
 import com.yourname.liquidalarm.R
 

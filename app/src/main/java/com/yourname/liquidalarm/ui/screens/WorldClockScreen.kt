@@ -79,7 +79,7 @@ fun WorldClockScreen(
                         containerColor = colorScheme.primary,
                         contentColor = colorScheme.onPrimary
                     ) {
-                        androidx.compose.material.Icon(Icons.Default.Add, contentDescription = "Add timezone")
+                        androidx.compose.material3.Icon(Icons.Default.Add, contentDescription = "Add timezone")
                     }
                 }
             }
@@ -136,7 +136,7 @@ fun WorldClockItem(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (isLocal) {
-                            androidx.compose.material.Icon(
+                            androidx.compose.material3.Icon(
                                 Icons.Default.Language,
                                 contentDescription = null,
                                 tint = colorScheme.primary,

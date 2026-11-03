@@ -7,7 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.ViewModel
+import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.*
+import com.yourname.liquidalarm.ui.theme.LiquidAlarmTheme
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.data.AlarmRepository
 import com.yourname.liquidalarm.data.PreferencesManager
@@ -26,32 +28,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LiquidAlarmTheme {
-                // Check for alarm intent
                 val alarmId = intent.getStringExtra("alarm_id")
                 val isPreAlarm = intent.getBooleanExtra("is_pre_alarm", false)
-
                 if (alarmId != null) {
-                    lifecycleScope.launch {
-                        val alarm = repository.getAlarms().firstOrNull { it.id == alarmId }
-                        alarm?.let {
-                            ActiveAlarmScreen(
-                                alarm = it,
-                                isPreAlarm = isPreAlarm,
-                                onDismiss = { finish() },
-                                onSnooze = { /* Handled by service */ },
-                                onMathChallenge = { /* Show math challenge */ },
-                                onQRChallenge = { /* Show QR challenge */ },
-                                onShakeChallenge = { /* Show shake challenge */ },
-                                onChallengeCompleted = { finish() }
-                            )
-                        }
+                    var currentAlarm by remember { mutableStateOf<AlarmEntity?>(null) }
+                    LaunchedEffect(alarmId) {
+                        currentAlarm = repository.getAlarms().firstOrNull { it.id == alarmId }
+                    }
+                    currentAlarm?.let {
+                        ActiveAlarmScreen(alarm = it, isPreAlarm = isPreAlarm, onDismiss = { finish() }, onSnooze = {}, onMathChallenge = {}, onQRChallenge = {}, onShakeChallenge = {}, onChallengeCompleted = { finish() })
                     }
                 } else {
-                    AppNavHost(
-                        repository = repository,
-                        prefs = prefs,
-                        startDestination = intent.getStringExtra("nav_destination")?.let { AppDestination.valueOf(it) } ?: AppDestination.AlarmList
-                    )
+                    AppNavHost(repository = repository, prefs = prefs, startDestination = AppDestination.AlarmList)
                 }
             }
         }

@@ -9,7 +9,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.exoplayer.upstream.DefaultDataSourceFactory
+import androidx.media3.common.Player
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.util.Util
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.data.AlarmSound
@@ -17,6 +18,7 @@ import com.yourname.liquidalarm.data.VolumeFade
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -89,24 +91,21 @@ class MediaPlayerManager(private val context: Context) {
                 val exoPlayer = ExoPlayer.Builder(context).build()
                 this@MediaPlayerManager.exoPlayer = exoPlayer
 
-                val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "LiquidAlarm"))
-                val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaItem(MediaItem.fromUri(uri))
-
-                exoPlayer.setMediaSource(mediaSource)
+                exoPlayer.setMediaItem(MediaItem.fromUri(uri))
                 exoPlayer.prepare()
                 exoPlayer.playWhenReady = true
                 exoPlayer.volume = 0f
 
                 startVolumeFade(exoPlayer, onCompletion)
 
-                exoPlayer.addListener(object : androidx.media3.exoplayer.Player.Listener {
+                exoPlayer.addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(playbackState: Int) {
-                        if (playbackState == androidx.media3.exoplayer.Player.STATE_ENDED) {
+                        if (playbackState == Player.STATE_ENDED) {
                             fadeJob?.cancel()
                             onCompletion(true)
                         }
                     }
-                    override fun onPlayerError(error: androidx.media3.exoplayer.ExoPlaybackException) {
+                    override fun onPlayerError(error: PlaybackException) {
                         fadeJob?.cancel()
                         onCompletion(false)
                     }
