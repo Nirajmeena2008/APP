@@ -39,14 +39,14 @@ fun AlarmListScreen(
     repository: AlarmRepository,
     prefs: PreferencesManager,
     onCreateAlarm: () -> Unit,
-    onEditAlarm: (AlarmEntity) -> Unit,
+    onEditAlarm: (com.yourname.liquidalarm.data.AlarmEntity) -> Unit,
     onNavigateToTimer: () -> Unit,
     onNavigateToStopwatch: () -> Unit,
     onNavigateToWorldClock: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     val alarms by remember {
-        mutableStateOf(emptyList<AlarmEntity>())
+        mutableStateOf(emptyList<com.yourname.liquidalarm.data.AlarmEntity>())
     }
     val showEmpty by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -131,7 +131,7 @@ fun AlarmListScreen(
         )
 
         // FAB
-        androidx.compose.material3.FloatingActionButton(
+        FloatingActionButton(
             onClick = onCreateAlarm,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -140,7 +140,7 @@ fun AlarmListScreen(
             contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
             androidx.compose.material.Icon(
-                imageVector = Icons.Default.Add,
+                imageVector = androidx.compose.material.icons.Icons.Default.Add,
                 contentDescription = "Add alarm",
                 modifier = Modifier.size(24.dp)
             )

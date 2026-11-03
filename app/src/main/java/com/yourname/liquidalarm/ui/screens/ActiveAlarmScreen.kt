@@ -33,11 +33,10 @@ import com.yourname.liquidalarm.alarm.AlarmForegroundService
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.ui.components.AlarmTimeDisplay
 import com.yourname.liquidalarm.ui.components.ChallengeButtons
-import com.yourname.liquidalarm.ui.theme.LiquidColors
 
 @Composable
 fun ActiveAlarmScreen(
-    alarm: AlarmEntity,
+    alarm: com.yourname.liquidalarm.data.AlarmEntity,
     isPreAlarm: Boolean,
     onDismiss: () -> Unit,
     onSnooze: () -> Unit,

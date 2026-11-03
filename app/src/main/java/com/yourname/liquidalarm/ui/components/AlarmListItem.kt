@@ -40,11 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.ui.components.GlassCard
-import com.yourname.liquidalarm.ui.theme.LiquidColors
 
 @Composable
 fun AlarmListItem(
-    alarm: AlarmEntity,
+    alarm: com.yourname.liquidalarm.data.AlarmEntity,
     onToggle: (Boolean) -> Unit,
     onClick: () -> Unit,
     onDelete: () -> Unit,
@@ -58,7 +57,7 @@ fun AlarmListItem(
         animationSpec = spring(dampingRatio = 0.8f, stiffness = 300f)
     )
 
-    GlassCard(
+    com.yourname.liquidalarm.ui.components.GlassCard(
         modifier = modifier
             .fillMaxWidth()
             .graphicsLayer {

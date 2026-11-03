@@ -2,7 +2,7 @@ package com.yourname.liquidalarm.ui.theme
 
 import android.app.Activity
 import android.content.Context
-
+import android.graphics.Color
 import android.os.Build
 import android.view.Window
 import android.view.WindowInsetsController
@@ -34,9 +34,9 @@ fun LiquidAlarmTheme(
             val insetsController = window.insetsController
             if (insetsController != null) {
                 if (isDark) {
-                    insetsController.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                    insetsController.systemBarsAppearance = 0
                 } else {
-                    insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                    insetsController.systemBarsAppearance = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
                 }
             }
             window.statusBarColor = Color.Transparent.toArgb()

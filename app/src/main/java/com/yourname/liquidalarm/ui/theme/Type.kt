@@ -1,7 +1,4 @@
 package com.yourname.liquidalarm.ui.theme
-import com.yourname.liquidalarm.R
-
-import com.yourname.liquidalarm.R
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -21,95 +18,95 @@ val LiquidTypography = androidx.compose.material3.Typography(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 96.sp,
-        lineHeight = 96.sp,
-        letterSpacing = -2.sp
+        lineHeight = androidx.compose.ui.unit.sp(96),
+        letterSpacing = androidx.compose.ui.unit.sp(-2)
     ),
     displayMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 60.sp,
-        lineHeight = 66.sp,
-        letterSpacing = -1.sp
+        lineHeight = androidx.compose.ui.unit.sp(66),
+        letterSpacing = androidx.compose.ui.unit.sp(-1)
     ),
     displaySmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
-        lineHeight = 44.sp
+        lineHeight = androidx.compose.ui.unit.sp(44)
     ),
     headlineLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
-        lineHeight = 40.sp
+        lineHeight = androidx.compose.ui.unit.sp(40)
     ),
     headlineMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        lineHeight = 32.sp
+        lineHeight = androidx.compose.ui.unit.sp(32)
     ),
     headlineSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        lineHeight = 28.sp
+        lineHeight = androidx.compose.ui.unit.sp(28)
     ),
     titleLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 22.sp,
-        lineHeight = 28.sp
+        lineHeight = androidx.compose.ui.unit.sp(28)
     ),
     titleMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 24.sp
+        lineHeight = androidx.compose.ui.unit.sp(24)
     ),
     titleSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        lineHeight = 20.sp
+        lineHeight = androidx.compose.ui.unit.sp(20)
     ),
     bodyLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 24.sp
+        lineHeight = androidx.compose.ui.unit.sp(24)
     ),
     bodyMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        lineHeight = 21.sp
+        lineHeight = androidx.compose.ui.unit.sp(21)
     ),
     bodySmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        lineHeight = 16.sp
+        lineHeight = androidx.compose.ui.unit.sp(16)
     ),
     labelLarge = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
-        lineHeight = 18.sp,
-        letterSpacing = 0.1.sp
+        lineHeight = androidx.compose.ui.unit.sp(18),
+        letterSpacing = androidx.compose.ui.unit.sp(0.1)
     ),
     labelMedium = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        lineHeight = androidx.compose.ui.unit.sp(16),
+        letterSpacing = androidx.compose.ui.unit.sp(0.5)
     ),
     labelSmall = TextStyle(
         fontFamily = InterFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
-        lineHeight = 15.sp,
-        letterSpacing = 0.5.sp
+        lineHeight = androidx.compose.ui.unit.sp(15),
+        letterSpacing = androidx.compose.ui.unit.sp(0.5)
     )
 )

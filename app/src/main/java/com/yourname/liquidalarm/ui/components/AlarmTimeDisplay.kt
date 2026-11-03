@@ -177,7 +177,7 @@ private fun formatTime(time: LocalTime, showSeconds: Boolean, is24Hour: Boolean)
     }
 }
 
-private fun getRepeatText(alarm: AlarmEntity): String {
+private fun getRepeatText(alarm: com.yourname.liquidalarm.data.AlarmEntity): String {
     return when (alarm.repeatRule) {
         is com.yourname.liquidalarm.data.RepeatRule.Once -> "Once"
         is com.yourname.liquidalarm.data.RepeatRule.Daily -> "Daily"

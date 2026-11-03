@@ -39,14 +39,14 @@ import com.yourname.liquidalarm.ui.components.VolumeRampSlider
 
 @Composable
 fun CreateAlarmScreen(
-    initialAlarm: AlarmEntity?,
-    onSave: (AlarmEntity) -> Unit,
+    initialAlarm: com.yourname.liquidalarm.data.AlarmEntity?,
+    onSave: (com.yourname.liquidalarm.data.AlarmEntity) -> Unit,
     onDismiss: () -> Unit,
     onPickSoundFile: () -> Unit,
-    onPreviewSound: (AlarmSound) -> Unit,
+    onPreviewSound: (com.yourname.liquidalarm.data.AlarmSound) -> Unit,
     onPreviewVibration: (com.yourname.liquidalarm.data.VibrationPattern) -> Unit
 ) {
-    val alarm = initialAlarm ?: AlarmEntity(time = kotlinx.datetime.LocalTime.now().plusMinutes(10))
+    val alarm = initialAlarm ?: com.yourname.liquidalarm.data.AlarmEntity(time = kotlinx.datetime.LocalTime.now().plusMinutes(10))
     
     var editingAlarm by remember { mutableStateOf(alarm) }
     var showTimePicker by remember { mutableStateOf(false) }
@@ -501,24 +501,24 @@ fun ChallengeSelector(
     }
 }
 
-private fun getRepeatSummary(rule: RepeatRule): String {
+private fun getRepeatSummary(rule: com.yourname.liquidalarm.data.RepeatRule): String {
     return when (rule) {
-        is RepeatRule.Once -> "Once"
-        is RepeatRule.Daily -> "Daily"
-        is RepeatRule.Weekdays -> "Weekdays"
-        is RepeatRule.Weekends -> "Weekends"
-        is RepeatRule.Weekly -> "Custom (${rule.days.size} days)"
-        is RepeatRule.Monthly -> "Monthly (day ${rule.dayOfMonth})"
-        is RepeatRule.Yearly -> "Yearly"
-        is RepeatRule.Interval -> "Every ${rule.days} days"
+        is com.yourname.liquidalarm.data.RepeatRule.Once -> "Once"
+        is com.yourname.liquidalarm.data.RepeatRule.Daily -> "Daily"
+        is com.yourname.liquidalarm.data.RepeatRule.Weekdays -> "Weekdays"
+        is com.yourname.liquidalarm.data.RepeatRule.Weekends -> "Weekends"
+        is com.yourname.liquidalarm.data.RepeatRule.Weekly -> "Custom (${rule.days.size} days)"
+        is com.yourname.liquidalarm.data.RepeatRule.Monthly -> "Monthly (day ${rule.dayOfMonth})"
+        is com.yourname.liquidalarm.data.RepeatRule.Yearly -> "Yearly"
+        is com.yourname.liquidalarm.data.RepeatRule.Interval -> "Every ${rule.days} days"
     }
 }
 
-private fun getSoundName(sound: AlarmSound): String {
+private fun getSoundName(sound: com.yourname.liquidalarm.data.AlarmSound): String {
     return when (sound) {
-        is AlarmSound.SystemDefault -> "Default"
-        is AlarmSound.Silent -> "Silent"
-        is AlarmSound.CustomFile -> sound.displayName
-        is AlarmSound.SystemRingtone -> "System"
+        is com.yourname.liquidalarm.data.AlarmSound.SystemDefault -> "Default"
+        is com.yourname.liquidalarm.data.AlarmSound.Silent -> "Silent"
+        is com.yourname.liquidalarm.data.AlarmSound.CustomFile -> sound.displayName
+        is com.yourname.liquidalarm.data.AlarmSound.SystemRingtone -> "System"
     }
 }

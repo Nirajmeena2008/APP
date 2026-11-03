@@ -1,11 +1,9 @@
 package com.yourname.liquidalarm.data
 
 import kotlinx.datetime.LocalTime
-import com.yourname.liquidalarm.data.MonthDay
+import kotlinx.datetime.MonthDay
 import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.*
 import kotlinx.datetime.Instant
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -24,8 +22,8 @@ data class AlarmEntity(
     val snooze: SnoozeConfig = SnoozeConfig(10, 3, false),
     val challenge: ChallengeType = ChallengeType.Math,
     val autoDismiss: AutoDismissConfig = AutoDismissConfig(false, 10),
-    val createdAt: Instant = Clock.System.now(),
-    val lastModified: Instant = Clock.System.now(),
+    val createdAt: Instant = Instant.now(),
+    val lastModified: Instant = Instant.now(),
     val nextFireTime: Instant? = null
 ) {
     fun copyWithModified(
@@ -52,21 +50,21 @@ data class AlarmEntity(
         snooze = snooze ?: this.snooze,
         challenge = challenge ?: this.challenge,
         autoDismiss = autoDismiss ?: this.autoDismiss,
-        lastModified = Clock.System.now()
+        lastModified = Instant.now()
     )
 
-    fun computeNextFireTime(now: Instant = Clock.System.now(), zone: TimeZone = TimeZone.currentSystemDefault()): Instant? {
+    fun computeNextFireTime(now: Instant = Instant.now(), zone: TimeZone = TimeZone.currentSystemDefault()): Instant? {
         if (!isEnabled) return null
-        val zdt = now.toLocalDateTime(zone)
+        val zdt = now.toInstant().toLocalDateTime(zone)
         val targetTime = this.time
-        var candidate = kotlinx.datetime.LocalDateTime(zdt.year, zdt.month, zdt.dayOfMonth, targetTime.hour, targetTime.minute).let { kotlinx.datetime.toInstant(it, zone) }
+        var candidate = zdt.with(targetTime).toInstant(zone)
 
-        if (candidate.toEpochMilliseconds() <= now.toEpochMilliseconds()) {
+        if (candidate <= now) {
             candidate = repeatRule.addPeriod(candidate, 1, zone)
         }
 
         return when (repeatRule) {
-            is RepeatRule.Once -> if (candidate.toEpochMilliseconds() > now.toEpochMilliseconds()) candidate else null
+            is RepeatRule.Once -> if (candidate > now) candidate else null
             is RepeatRule.Daily -> candidate
             is RepeatRule.Weekdays -> {
                 while (candidate.dayOfWeek == DayOfWeek.SATURDAY || candidate.dayOfWeek == DayOfWeek.SUNDAY) {
@@ -86,8 +84,8 @@ data class AlarmEntity(
                 while (!days.contains(next.dayOfWeek)) {
                     next = next.plusDays(1)
                 }
-                if (next.toEpochMilliseconds() <= now.toEpochMilliseconds()) {
-                    next = next.plusDays(7 - ((days.maxOrNull()?.ordinal ?: 0) - (days.minOrNull()?.ordinal ?: 0)))
+                if (next <= now) {
+                    next = next.plusDays(7 - days.maxOrNull()?.ordinal?.minus(days.minOrNull()?.ordinal ?: 0) ?: 7)
                 }
                 next
             }
@@ -97,7 +95,7 @@ data class AlarmEntity(
                 while (next.dayOfMonth != day) {
                     next = next.plusDays(1)
                 }
-                if (next.toEpochMilliseconds() <= now.toEpochMilliseconds()) {
+                if (next <= now) {
                     next = next.plusMonths(1)
                     while (next.dayOfMonth != day) {
                         next = next.plusDays(1)
@@ -111,7 +109,7 @@ data class AlarmEntity(
                 while (MonthDay(next.month, next.dayOfMonth) != md) {
                     next = next.plusDays(1)
                 }
-                if (next.toEpochMilliseconds() <= now.toEpochMilliseconds()) {
+                if (next <= now) {
                     next = next.plusYears(1)
                     while (MonthDay(next.month, next.dayOfMonth) != md) {
                         next = next.plusDays(1)
@@ -122,7 +120,7 @@ data class AlarmEntity(
             is RepeatRule.Interval -> {
                 val interval = (repeatRule as RepeatRule.Interval).days
                 var next = candidate
-                while (next.toEpochMilliseconds() <= now.toEpochMilliseconds()) {
+                while (next <= now) {
                     next = next.plusDays(interval)
                 }
                 next
