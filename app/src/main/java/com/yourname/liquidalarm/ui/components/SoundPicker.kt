@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filed.MusicNote
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filed.Folder
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Chip
 import androidx.compose.material3.MaterialTheme
@@ -162,11 +162,9 @@ fun SystemSoundOption(
                     color = if (isSelected) colorScheme.onPrimaryContainer else colorScheme.onSurface
                 )
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isSelected) {
-                    androidx.compose.material.icons.filed.Check(
+                    androidx.compose.material.icons.filled.Check(
                         contentDescription = null,
                         tint = colorScheme.primary
                     )

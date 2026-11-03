@@ -107,7 +107,7 @@ fun VibrationPicker(
                     if (isCustomSelected) {
                         androidx.compose.material.icons.filled.Check(
                             contentDescription = null,
-                            tint = colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

@@ -3,16 +3,10 @@ package com.yourname.liquidalarm.data
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.mutablePreferencesOf
-
-
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx3.asFlowable
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.first
+import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.rxjava3.preferences
+import androidx.datastore.rxjava3.RxDataStore
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -20,14 +14,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.Serializable
 import java.io.File
 
 class AlarmRepository(private val context: Context) {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("liquid_alarm_alarms")
-    private val dataStore = context.dataStore
+    private val dataStore: RxDataStore<Preferences> = context.createDataStore("liquid_alarm_alarms")
     private val json = Json { prettyPrint = true; ignoreUnknownKeys = true; isLenient = true }
     private val ALARMS_KEY = stringPreferencesKey("alarms_json")
     private val customSoundsDir: File = File(context.filesDir, "alarms").apply { mkdirs() }
@@ -36,16 +26,16 @@ class AlarmRepository(private val context: Context) {
         .map { prefs ->
             val jsonString = prefs[ALARMS_KEY] ?: "[]"
             AlarmSerializer.deserialize(jsonString)
-        }.asFlowable()
+        }
         .onErrorReturn { emptyList() }
         .subscribeOn(Schedulers.io())
 
-    suspend fun getAlarms(): List<AlarmEntity> = dataStore.data.map { prefs -> AlarmSerializer.deserialize(prefs[ALARMS_KEY] ?: "[]") }.firstOrNull() ?: emptyList()
+    suspend fun getAlarms(): List<AlarmEntity> = alarmsFlow.firstElement().blockingGet()
 
     suspend fun saveAlarms(alarms: List<AlarmEntity>): Boolean = withContext(Dispatchers.IO) {
         try {
             val jsonString = AlarmSerializer.serialize(alarms)
-            dataStore.edit { it[ALARMS_KEY] = jsonString }
+            dataStore.updateData { it[ALARMS_KEY] = jsonString }.await()
             true
         } catch (e: Exception) {
             false
@@ -108,10 +98,10 @@ class AlarmRepository(private val context: Context) {
 
     suspend fun exportBackup(): String = withContext(Dispatchers.IO) {
         val alarms = getAlarms()
-        return@withContext json.encodeToString(
+        return json.encodeToString(
             BackupData(
                 version = 1,
-                exportedAt = kotlinx.datetime.Clock.System.now().toString(),
+                exportedAt = java.time.Instant.now().toString(),
                 alarms = alarms
             )
         )
@@ -120,7 +110,7 @@ class AlarmRepository(private val context: Context) {
     suspend fun importBackup(jsonString: String): Boolean = withContext(Dispatchers.IO) {
         try {
             val backup = json.decodeFromString<BackupData>(jsonString)
-            return@withContext saveAlarms(backup.alarms)
+            return saveAlarms(backup.alarms)
         } catch (e: Exception) {
             false
         }

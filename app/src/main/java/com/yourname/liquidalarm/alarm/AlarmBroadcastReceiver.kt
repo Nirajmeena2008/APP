@@ -1,10 +1,8 @@
 package com.yourname.liquidalarm.alarm
 
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
 import com.yourname.liquidalarm.data.AlarmRepository

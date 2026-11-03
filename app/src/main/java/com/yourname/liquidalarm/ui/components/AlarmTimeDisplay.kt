@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yourname.liquidalarm.data.AlarmEntity
-import com.yourname.liquidalarm.ui.theme.LiquidColors
 import kotlinx.datetime.LocalTime
 
 @Composable

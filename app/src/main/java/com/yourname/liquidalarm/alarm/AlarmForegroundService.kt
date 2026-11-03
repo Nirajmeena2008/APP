@@ -23,7 +23,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 
-class AlarmForegroundService : androidx.lifecycle.LifecycleService() {
+class AlarmForegroundService : Service() {
     companion object {
         const val ACTION_MAIN_ALARM = "com.yourname.liquidalarm.ACTION_MAIN_ALARM"
         const val ACTION_PRE_ALARM = "com.yourname.liquidalarm.ACTION_PRE_ALARM"
@@ -48,6 +48,8 @@ class AlarmForegroundService : androidx.lifecycle.LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        lifecycleRegistry = LifecycleRegistry(this)
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
         createNotificationChannel()
 
@@ -73,23 +75,22 @@ class AlarmForegroundService : androidx.lifecycle.LifecycleService() {
             val repository = AlarmRepository(this@AlarmForegroundService)
             alarm = repository.getAlarms().firstOrNull { it.id == alarmId }
 
-            val currentAlarm = alarm
-            if (currentAlarm != null) {
-                maxSnoozeCount = currentAlarm.snooze.maxCount
-                snoozeDurationMs = currentAlarm.snooze.durationMinutes * 60 * 1000L
+            if (alarm != null) {
+                maxSnoozeCount = alarm.snooze.maxCount
+                snoozeDurationMs = alarm.snooze.durationMinutes * 60 * 1000L
 
                 showNotification()
 
                 mediaPlayerManager = MediaPlayerManager(this@AlarmForegroundService)
-                mediaPlayerManager?.playAlarm(currentAlarm, isPreAlarm) { success ->
+                mediaPlayerManager?.playAlarm(alarm!!, isPreAlarm) { success ->
                     if (!success) {
                         stopSelf()
                     }
                 }
 
-                if (currentAlarm.autoDismiss.enabled) {
+                if (alarm!!.autoDismiss.enabled) {
                     autoDismissJob = CoroutineScope(Dispatchers.Main).launch {
-                        delay(currentAlarm.autoDismiss.timeoutMinutes * 60 * 1000L)
+                        delay(alarm!!.autoDismiss.timeoutMinutes * 60 * 1000L)
                         if (!challengeCompleted) {
                             dismissAlarm()
                         }
@@ -226,8 +227,9 @@ class AlarmForegroundService : androidx.lifecycle.LifecycleService() {
         autoDismissJob?.cancel()
         mediaPlayerManager?.stop()
         wakeLock?.release()
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent): IBinder? = super.onBind(intent)
+    override fun onBind(intent: Intent?): IBinder? = null
 }

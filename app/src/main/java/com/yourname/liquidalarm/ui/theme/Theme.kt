@@ -2,7 +2,7 @@ package com.yourname.liquidalarm.ui.theme
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
+
 import android.os.Build
 import android.view.Window
 import android.view.WindowInsetsController
@@ -34,16 +34,16 @@ fun LiquidAlarmTheme(
             val insetsController = window.insetsController
             if (insetsController != null) {
                 if (isDark) {
-                    insetsController.systemBarsAppearance = 0
+                    insetsController.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
                 } else {
-                    insetsController.systemBarsAppearance = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
                 }
             }
-            window.statusBarColor = Color.TRANSPARENT.toArgb()
-            window.navigationBarColor = Color.TRANSPARENT.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.TRANSPARENT.toArgb()
-            window.navigationBarColor = Color.TRANSPARENT.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
             if (!isDark) {
                 window.decorView.systemUiVisibility = android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }

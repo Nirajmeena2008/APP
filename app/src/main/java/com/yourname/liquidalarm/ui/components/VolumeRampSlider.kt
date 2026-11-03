@@ -63,7 +63,10 @@ fun VolumeRampSlider(
                 verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
             ) {
                 // Duration slider
-                VStack(spacing = 8.dp) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
@@ -125,19 +128,6 @@ fun VolumeRampSlider(
             }
         }
     }
-}
-
-@Composable
-private fun VStack(
-    modifier: Modifier = Modifier,
-    spacing: androidx.compose.ui.unit.Dp = 0.dp,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(spacing),
-        content = content
-    )
 }
 
 private fun formatDuration(seconds: Int): String {

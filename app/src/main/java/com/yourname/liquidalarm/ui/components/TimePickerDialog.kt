@@ -193,7 +193,7 @@ fun AmPmPicker(
             ) {
                 Text(
                     text = if (isAm) "AM" else "PM",
-                    style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.displayMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
                 )
             }
         }

@@ -7,10 +7,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.rxjava3.preferences
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx3.asFlowable
+import androidx.datastore.rxjava3.RxDataStore
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -18,8 +15,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.tasks.await
 
 class PreferencesManager(private val context: Context) {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("liquid_alarm_prefs")
-    private val dataStore = context.dataStore
+    private val dataStore: RxDataStore<Preferences> = context.createDataStore("liquid_alarm_prefs")
 
     private val KEY_THEME = intPreferencesKey("theme")
     private val KEY_TIME_FORMAT_24H = booleanPreferencesKey("time_format_24h")
@@ -36,49 +32,49 @@ class PreferencesManager(private val context: Context) {
     private val KEY_FIRST_LAUNCH = booleanPreferencesKey("first_launch")
     private val KEY_CUSTOM_SOUNDS_DIR = stringPreferencesKey("custom_sounds_dir")
 
-    val theme: Flowable<Int> = dataStore.data.map { it[KEY_THEME] ?: 0 }.asFlowable()
-    suspend fun setTheme(value: Int) { dataStore.edit { it[KEY_THEME] = value } }
+    val theme: Flowable<Int> = dataStore.data.map { it[KEY_THEME] ?: 0 }
+    suspend fun setTheme(value: Int) = dataStore.updateData { it[KEY_THEME] = value }
 
-    val timeFormat24h: Flowable<Boolean> = dataStore.data.map { it[KEY_TIME_FORMAT_24H] ?: true }.asFlowable()
-    suspend fun setTimeFormat24h(value: Boolean) { dataStore.edit { it[KEY_TIME_FORMAT_24H] = value } }
+    val timeFormat24h: Flowable<Boolean> = dataStore.data.map { it[KEY_TIME_FORMAT_24H] ?: true }
+    suspend fun setTimeFormat24h(value: Boolean) = dataStore.updateData { it[KEY_TIME_FORMAT_24H] = value }
 
-    val defaultSnoozeMinutes: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_SNOOZE_MINUTES] ?: 10 }.asFlowable()
-    suspend fun setDefaultSnoozeMinutes(value: Int) { dataStore.edit { it[KEY_DEFAULT_SNOOZE_MINUTES] = value } }
+    val defaultSnoozeMinutes: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_SNOOZE_MINUTES] ?: 10 }
+    suspend fun setDefaultSnoozeMinutes(value: Int) = dataStore.updateData { it[KEY_DEFAULT_SNOOZE_MINUTES] = value }
 
-    val defaultFadeSeconds: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_FADE_SECONDS] ?: 60 }.asFlowable()
-    suspend fun setDefaultFadeSeconds(value: Int) { dataStore.edit { it[KEY_DEFAULT_FADE_SECONDS] = value } }
+    val defaultFadeSeconds: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_FADE_SECONDS] ?: 60 }
+    suspend fun setDefaultFadeSeconds(value: Int) = dataStore.updateData { it[KEY_DEFAULT_FADE_SECONDS] = value }
 
-    val defaultChallenge: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_CHALLENGE] ?: 0 }.asFlowable()
-    suspend fun setDefaultChallenge(value: Int) { dataStore.edit { it[KEY_DEFAULT_CHALLENGE] = value } }
+    val defaultChallenge: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_CHALLENGE] ?: 0 }
+    suspend fun setDefaultChallenge(value: Int) = dataStore.updateData { it[KEY_DEFAULT_CHALLENGE] = value }
 
-    val defaultPreAlarmMinutes: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_PRE_ALARM_MINUTES] ?: 10 }.asFlowable()
-    suspend fun setDefaultPreAlarmMinutes(value: Int) { dataStore.edit { it[KEY_DEFAULT_PRE_ALARM_MINUTES] = value } }
+    val defaultPreAlarmMinutes: Flowable<Int> = dataStore.data.map { it[KEY_DEFAULT_PRE_ALARM_MINUTES] ?: 10 }
+    suspend fun setDefaultPreAlarmMinutes(value: Int) = dataStore.updateData { it[KEY_DEFAULT_PRE_ALARM_MINUTES] = value }
 
-    val defaultPreAlarmEnabled: Flowable<Boolean> = dataStore.data.map { it[KEY_DEFAULT_PRE_ALARM_ENABLED] ?: false }.asFlowable()
-    suspend fun setDefaultPreAlarmEnabled(value: Boolean) { dataStore.edit { it[KEY_DEFAULT_PRE_ALARM_ENABLED] = value } }
+    val defaultPreAlarmEnabled: Flowable<Boolean> = dataStore.data.map { it[KEY_DEFAULT_PRE_ALARM_ENABLED] ?: false }
+    suspend fun setDefaultPreAlarmEnabled(value: Boolean) = dataStore.updateData { it[KEY_DEFAULT_PRE_ALARM_ENABLED] = value }
 
-    val vibrationEnabled: Flowable<Boolean> = dataStore.data.map { it[KEY_VIBRATION_ENABLED] ?: true }.asFlowable()
-    suspend fun setVibrationEnabled(value: Boolean) { dataStore.edit { it[KEY_VIBRATION_ENABLED] = value } }
+    val vibrationEnabled: Flowable<Boolean> = dataStore.data.map { it[KEY_VIBRATION_ENABLED] ?: true }
+    suspend fun setVibrationEnabled(value: Boolean) = dataStore.updateData { it[KEY_VIBRATION_ENABLED] = value }
 
-    val autoDismissMinutes: Flowable<Int> = dataStore.data.map { it[KEY_AUTO_DISMISS_MINUTES] ?: 10 }.asFlowable()
-    suspend fun setAutoDismissMinutes(value: Int) { dataStore.edit { it[KEY_AUTO_DISMISS_MINUTES] = value } }
+    val autoDismissMinutes: Flowable<Int> = dataStore.data.map { it[KEY_AUTO_DISMISS_MINUTES] ?: 10 }
+    suspend fun setAutoDismissMinutes(value: Int) = dataStore.updateData { it[KEY_AUTO_DISMISS_MINUTES] = value }
 
-    val showSeconds: Flowable<Boolean> = dataStore.data.map { it[KEY_SHOW_SECONDS] ?: false }.asFlowable()
-    suspend fun setShowSeconds(value: Boolean) { dataStore.edit { it[KEY_SHOW_SECONDS] = value } }
+    val showSeconds: Flowable<Boolean> = dataStore.data.map { it[KEY_SHOW_SECONDS] ?: false }
+    suspend fun setShowSeconds(value: Boolean) = dataStore.updateData { it[KEY_SHOW_SECONDS] = value }
 
-    val keepScreenOn: Flowable<Boolean> = dataStore.data.map { it[KEY_KEEP_SCREEN_ON] ?: true }.asFlowable()
-    suspend fun setKeepScreenOn(value: Boolean) { dataStore.edit { it[KEY_KEEP_SCREEN_ON] = value } }
+    val keepScreenOn: Flowable<Boolean> = dataStore.data.map { it[KEY_KEEP_SCREEN_ON] ?: true }
+    suspend fun setKeepScreenOn(value: Boolean) = dataStore.updateData { it[KEY_KEEP_SCREEN_ON] = value }
 
-    val batteryOptimizationChecked: Flowable<Boolean> = dataStore.data.map { it[KEY_BATTERY_OPTIMIZATION_CHECKED] ?: false }.asFlowable()
-    suspend fun setBatteryOptimizationChecked(value: Boolean) { dataStore.edit { it[KEY_BATTERY_OPTIMIZATION_CHECKED] = value } }
+    val batteryOptimizationChecked: Flowable<Boolean> = dataStore.data.map { it[KEY_BATTERY_OPTIMIZATION_CHECKED] ?: false }
+    suspend fun setBatteryOptimizationChecked(value: Boolean) = dataStore.updateData { it[KEY_BATTERY_OPTIMIZATION_CHECKED] = value }
 
-    val isFirstLaunch: Flowable<Boolean> = dataStore.data.map { it[KEY_FIRST_LAUNCH] ?: true }.asFlowable()
-    suspend fun setFirstLaunchComplete() { dataStore.edit { it[KEY_FIRST_LAUNCH] = false } }
+    val isFirstLaunch: Flowable<Boolean> = dataStore.data.map { it[KEY_FIRST_LAUNCH] ?: true }
+    suspend fun setFirstLaunchComplete() = dataStore.updateData { it[KEY_FIRST_LAUNCH] = false }
 
-    val customSoundsDir: Flowable<String> = dataStore.data.map { it[KEY_CUSTOM_SOUNDS_DIR] ?: "" }.asFlowable()
-    suspend fun setCustomSoundsDir(value: String) { dataStore.edit { it[KEY_CUSTOM_SOUNDS_DIR] = value } }
+    val customSoundsDir: Flowable<String> = dataStore.data.map { it[KEY_CUSTOM_SOUNDS_DIR] ?: "" }
+    suspend fun setCustomSoundsDir(value: String) = dataStore.updateData { it[KEY_CUSTOM_SOUNDS_DIR] = value }
 
-    fun themeSingle(): Single<Int> = theme.firstOrError()
-    fun timeFormat24hSingle(): Single<Boolean> = timeFormat24h.firstOrError()
-    fun defaultSnoozeMinutesSingle(): Single<Int> = defaultSnoozeMinutes.firstOrError()
+    fun themeSingle(): Single<Int> = theme.firstElement()
+    fun timeFormat24hSingle(): Single<Boolean> = timeFormat24h.firstElement()
+    fun defaultSnoozeMinutesSingle(): Single<Int> = defaultSnoozeMinutes.firstElement()
 }

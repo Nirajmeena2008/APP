@@ -12,10 +12,8 @@ import com.yourname.liquidalarm.data.AlarmRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import kotlin.math.abs
 
 object AlarmScheduler {
     private const val ACTION_ALARM_FIRE = "com.yourname.liquidalarm.ALARM_FIRE"
@@ -31,7 +29,7 @@ object AlarmScheduler {
 
         if (!alarm.isEnabled) return
 
-        val now = Clock.System.now()
+        val now = Instant.now()
         val zone = TimeZone.currentSystemDefault()
 
         val mainFireTime = alarm.computeNextFireTime(now, zone)
@@ -70,7 +68,7 @@ object AlarmScheduler {
         }
 
         val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        val requestCode = abs(alarmId.hashCode() * 31 + (if (isPreAlarm) 1 else 0))
+        val requestCode = (alarmId.hashCode() * 31 + (if (isPreAlarm) 1 else 0)).abs()
 
         val pendingIntent = PendingIntent.getBroadcast(
             context, requestCode, intent, flags
@@ -100,11 +98,11 @@ object AlarmScheduler {
         val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 
-        val mainRequestCode = abs(alarmId.hashCode() * 31)
+        val mainRequestCode = (alarmId.hashCode() * 31).abs()
         val mainPendingIntent = PendingIntent.getBroadcast(context, mainRequestCode, intent, flags)
         alarmManager.cancel(mainPendingIntent)
 
-        val preRequestCode = abs(alarmId.hashCode() * 31 + 1)
+        val preRequestCode = (alarmId.hashCode() * 31 + 1).abs()
         val prePendingIntent = PendingIntent.getBroadcast(context, preRequestCode, intent, flags)
         alarmManager.cancel(prePendingIntent)
     }

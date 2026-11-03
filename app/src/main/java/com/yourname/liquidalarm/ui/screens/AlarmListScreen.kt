@@ -25,10 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.data.AlarmRepository
+import com.yourname.liquidalarm.data.PreferencesManager
 import com.yourname.liquidalarm.ui.components.AlarmListItem
 import com.yourname.liquidalarm.ui.components.GlassCard
 import com.yourname.liquidalarm.ui.components.NextAlarmDisplay
-import com.yourname.liquidalarm.ui.navigation.AppNavHost
+import com.yourname.liquidalarm.ui.components.BottomNavBar
 import com.yourname.liquidalarm.util.PreferencesManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +50,8 @@ fun AlarmListScreen(
     }
     val showEmpty by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    val is24Hour by remember { mutableStateOf(true) }
+    var selectedTab by remember { mutableStateOf(0) }
+    var is24Hour by remember { mutableStateOf(true) }
 
     // Load alarms
     androidx.compose.runtime.LaunchedEffect(Unit) {
@@ -114,8 +116,22 @@ fun AlarmListScreen(
             }
         }
 
+        // Bottom navigation
+        BottomNavBar(
+            selectedIndex = selectedTab,
+            onItemClick = { index ->
+                selectedTab = index
+                when (index) {
+                    0 -> { /* Already on alarms */ }
+                    1 -> onNavigateToTimer()
+                    2 -> onNavigateToStopwatch()
+                    3 -> onNavigateToWorldClock()
+                }
+            }
+        )
+
         // FAB
-        FloatingActionButton(
+        androidx.compose.material3.FloatingActionButton(
             onClick = onCreateAlarm,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

@@ -1,9 +1,6 @@
 package com.yourname.liquidalarm.data
 
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.Serializable
 
 object AlarmSerializer {
     private val json = Json {
@@ -27,7 +24,7 @@ object AlarmSerializer {
     fun serializeForBackup(alarms: List<AlarmEntity>, version: Int = 1): String {
         val backup = BackupData(
             version = version,
-            exportedAt = kotlinx.datetime.Clock.System.now().toString(),
+            exportedAt = java.time.Instant.now().toString(),
             alarms = alarms
         )
         return json.encodeToString(backup)

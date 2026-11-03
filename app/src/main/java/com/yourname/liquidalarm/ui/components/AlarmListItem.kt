@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.fillMaxWidth
-import androidx.compose.ui.layout.fillMaxSize
 import androidx.compose.ui.layout.preferredWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp

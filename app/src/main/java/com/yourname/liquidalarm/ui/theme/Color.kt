@@ -67,13 +67,3 @@ val LightColorScheme = androidx.compose.material3.lightColorScheme(
     inverseOnSurface = Color(0xFFE0E0E0),
     inversePrimary = Color(0xFFD97706)
 )
-
-// Custom colors for specific use cases
-object LiquidColors {
-    val GlowAmber = Color(0x4DD97706)      // 30% amber glow
-    val GlowAmberLight = Color(0x33D97706) // 20% amber glow light
-    val AccentGreen = Color(0xFF22C55E)
-    val AccentRed = Color(0xFFDC2626)
-    val FgMuted = Color(0xFF94A3B8)
-    val FgMutedLight = Color(0xFF64748B)
-}

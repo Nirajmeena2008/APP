@@ -13,9 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filed.PlayArrow
-import androidx.compose.material.icons.filed.Pause
-import androidx.compose.material.icons.filed.Replay
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -148,7 +148,7 @@ fun TimerScreen(
                             .fillMaxHeight()
                             .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp))
                     )
-                )
+                }
             }
 
             // Time pickers (when not running)

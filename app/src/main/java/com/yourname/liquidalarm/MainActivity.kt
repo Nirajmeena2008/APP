@@ -7,13 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.yourname.liquidalarm.ui.theme.LiquidAlarmTheme
+import androidx.lifecycle.viewmodel.ViewModel
 import com.yourname.liquidalarm.data.AlarmEntity
 import com.yourname.liquidalarm.data.AlarmRepository
 import com.yourname.liquidalarm.data.PreferencesManager
@@ -37,35 +31,26 @@ class MainActivity : ComponentActivity() {
                 val isPreAlarm = intent.getBooleanExtra("is_pre_alarm", false)
 
                 if (alarmId != null) {
-                    var currentAlarm by remember { mutableStateOf<AlarmEntity?>(null) }
-                    LaunchedEffect(alarmId) {
-                        currentAlarm = repository.getAlarms().firstOrNull { it.id == alarmId }
-                    }
-                    currentAlarm?.let {
-                        ActiveAlarmScreen(
-                            alarm = it,
-                            isPreAlarm = isPreAlarm,
-                            onDismiss = { finish() },
-                            onSnooze = { /* Handled by service */ },
-                            onMathChallenge = { /* Show math challenge */ },
-                            onQRChallenge = { /* Show QR challenge */ },
-                            onShakeChallenge = { /* Show shake challenge */ },
-                            onChallengeCompleted = { finish() }
-                        )
+                    lifecycleScope.launch {
+                        val alarm = repository.getAlarms().firstOrNull { it.id == alarmId }
+                        alarm?.let {
+                            ActiveAlarmScreen(
+                                alarm = it,
+                                isPreAlarm = isPreAlarm,
+                                onDismiss = { finish() },
+                                onSnooze = { /* Handled by service */ },
+                                onMathChallenge = { /* Show math challenge */ },
+                                onQRChallenge = { /* Show QR challenge */ },
+                                onShakeChallenge = { /* Show shake challenge */ },
+                                onChallengeCompleted = { finish() }
+                            )
+                        }
                     }
                 } else {
-                    val navDest = intent.getStringExtra("nav_destination")
-                    val startDest = when (navDest) {
-                        "Timer" -> AppDestination.Timer
-                        "Stopwatch" -> AppDestination.Stopwatch
-                        "WorldClock" -> AppDestination.WorldClock
-                        "Settings" -> AppDestination.Settings
-                        else -> AppDestination.AlarmList
-                    }
                     AppNavHost(
                         repository = repository,
                         prefs = prefs,
-                        startDestination = startDest
+                        startDestination = intent.getStringExtra("nav_destination")?.let { AppDestination.valueOf(it) } ?: AppDestination.AlarmList
                     )
                 }
             }

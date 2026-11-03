@@ -250,8 +250,8 @@ fun CreateAlarmScreen(
                                 Text(
                                     text = getSoundName(editingAlarm.preAlarmConfig.sound),
                                     style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                }
-                            )
+                                )
+                            }
                             SoundPicker(
                                 currentSound = editingAlarm.preAlarmConfig.sound,
                                 onSoundChange = { sound ->
@@ -415,7 +415,7 @@ fun CreateAlarmScreen(
                                     )
                                 }
                             )
-                        )
+                        }
 
                         if (editingAlarm.autoDismiss.enabled) {
                             androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 16.dp))
